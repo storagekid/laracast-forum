@@ -53,13 +53,13 @@
             addReply() {
 
                 axios.post(location.pathname + '/replies', { body: this.body })
+                    .catch((error) => {
+                        flash(error.response.data, 'danger');
+                    })
                     .then(response => {
                         this.body = '';
                         this.$emit('replyCreated', response.data);
-                        flash('Your Reply has been posted.');
-                    }).catch((error) => {
-                        console.log(error.response.data.errors);                       
-                        this.errors = error.response.data.errors;
+                        flash('Your Reply has been posted.', 'success');
                     });
             }
         }

@@ -1,5 +1,5 @@
 <template>
-    <div class="alert alert-success alert-flash" role="alert" v-show="flashEvent">
+    <div :class="classes" role="alert" v-show="flashEvent">
       <strong>Success!</strong> {{ body }}
     </div>
 </template>
@@ -15,10 +15,15 @@
             return {
 
                 body: '',
+                label: '',
                 flashEvent: false,
             };
         },
-
+        computed: {
+            classes() {
+                return 'alert-flash alert alert-' + this.label;
+            }
+        },
         created() {
 
             if (this.message) {
@@ -26,17 +31,18 @@
                 this.showFlash(this.message);
             }
 
-            window.events.$on('flash', message => {
+            window.events.$on('flash', data => {
 
-                this.showFlash(message);
+                this.showFlash(data);
             })
         },
 
         methods: {
 
-            showFlash(message) {
+            showFlash(data) {
 
-               this.body = message,
+               this.body = data.message,
+               this.label = data.label,
                this.flashEvent = true;   
 
                this.hideFlash();  

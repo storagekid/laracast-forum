@@ -98,6 +98,8 @@ import moment from 'moment';
                 }
                 axios.patch('/replies/'+this.data.id, {
                     body: this.replyBody,
+                }).catch(error => {
+                    flash(error.response.data, 'danger');
                 });
 
                 this.editing = false;

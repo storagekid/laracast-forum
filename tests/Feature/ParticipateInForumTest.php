@@ -49,11 +49,13 @@ class ParticipateInForumTest extends TestCase
         $thread = create('App\Thread');
         // Body is required
         $this->publishReply($thread->path(),['body'=>null,'thread_id'=>$thread->id])
-            ->assertSessionHasErrors('body');
+            // ->assertSessionHasErrors('body');
+            ->assertStatus(422);
 
         // Body has to be at least 5 characters long
         $this->publishReply($thread->path(),['body'=>'papa','thread_id'=>$thread->id])
-            ->assertSessionHasErrors('body');
+            // ->assertSessionHasErrors('body');
+            ->assertStatus(422);
 
     }
 
@@ -125,8 +127,9 @@ class ParticipateInForumTest extends TestCase
         $reply = make('App\Reply', [
             'body' => 'Yahoo Customer Support'
         ]);
-        $this->expectException(\Exception::class);
-        $this->post($thread->path().'/replies', $reply->toArray());
+        // $this->expectException(\Exception::class);
+        $this->post($thread->path().'/replies', $reply->toArray())
+            ->assertStatus(422);
     }
 
     public function publishReply($path,$overrrides){
