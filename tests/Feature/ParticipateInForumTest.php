@@ -50,12 +50,12 @@ class ParticipateInForumTest extends TestCase
         // Body is required
         $this->publishReply($thread->path(),['body'=>null,'thread_id'=>$thread->id])
             // ->assertSessionHasErrors('body');
-            ->assertStatus(422);
+            ->assertStatus(302);
 
         // Body has to be at least 5 characters long
         $this->publishReply($thread->path(),['body'=>'papa','thread_id'=>$thread->id])
             // ->assertSessionHasErrors('body');
-            ->assertStatus(422);
+            ->assertStatus(302);
 
     }
 
@@ -99,9 +99,8 @@ class ParticipateInForumTest extends TestCase
 
         $this->signIn();
 
-        $this->patch('/replies/'.$reply->id)
+        $this->patch('/replies/'.$reply->id, ['body' => $body])
             ->assertStatus(403);
-
     }
 
     /** @test */
@@ -122,25 +121,25 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     public function replies_that_contain_spam_may_not_be_created()
     {
-        $this->withOutExceptionHandling()->signIn();
+        $this->withExceptionHandling()->signIn();
         $thread = create('App\Thread');
         $reply = make('App\Reply', [
             'body' => 'Yahoo Customer Support'
         ]);
         // $this->expectException(\Exception::class);
-        $this->post($thread->path().'/replies', $reply->toArray())
+        $this->json('post',$thread->path().'/replies', $reply->toArray())
             ->assertStatus(422);
     }
     /** @test */
     public function a_user_can_only_reply_once_per_minute()
     {
-        $this->withOutExceptionHandling()->signIn();
+        $this->withExceptionHandling()->signIn();
         $thread = create('App\Thread');
         $reply = make('App\Reply', [
             'body' => 'My simple Reply'
         ]);
         $this->post($thread->path().'/replies', $reply->toArray())
-            ->assertStatus(302);
+            ->assertStatus(200);
         $this->post($thread->path().'/replies', $reply->toArray())
             ->assertStatus(429);
     }

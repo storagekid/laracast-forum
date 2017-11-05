@@ -47,28 +47,34 @@ class ManageThreadsTest extends TestCase
     {
         // Title is required
         $this->publishThread(['title'=>null])
+            // ->assertStatus(422);
             ->assertSessionHasErrors('title');
 
         // Title's length can't be less than 5
         $this->publishThread(['title'=>'pata'])
+            // ->assertStatus(422);
             ->assertSessionHasErrors('title');
 
         // Title's length can't be more than 30
         $this->publishThread(['title'=>'patajhfifheifheiuwfhewhfeuiwfheuwfhei'])
+            // ->assertStatus(422);
             ->assertSessionHasErrors('title');
 
         // Body is required
         $this->publishThread(['body'=>null])
+            // ->assertStatus(422);
             ->assertSessionHasErrors('body');
 
         factory('App\Channel',2)->create();
 
         // Channel ID is required
         $this->publishThread(['channel_id'=>null])
+            // ->assertStatus(422);
             ->assertSessionHasErrors('channel_id');
 
         // Channel ID has to exists on Channels table
         $this->publishThread(['channel_id'=>999])
+            // ->assertStatus(422);
             ->assertSessionHasErrors('channel_id');
     }
 

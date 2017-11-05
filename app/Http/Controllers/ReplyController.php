@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\CreatePostForm;
+use App\Http\Requests\UpdatePostForm;
 use App\Thread;
 use App\Favorite;
 use App\Reply;
@@ -19,26 +20,8 @@ class ReplyController extends Controller
         return $thread->replies()->latest()->paginate(10);
     }
 
-    public function store($channelId, Thread $thread) {
-        if (Gate::denies('create', new Reply)) {
-            return response('Replies are allow only one per minute', 429);
-        }
-        try {
-            // $this->authorize('create', New Reply);
-            $this->validateReply();
-
-            $reply = $thread->addReply([
-                'body' => request('body'),
-                'user_id' => auth()->id()
-            ]);
-        } catch(\Exception $e) {
-            return response('Sorry your reply could not be saved at this time.', 422);
-        }
-
-        if (request()->expectsJson()) {
-            return $reply->load('owner');
-        }
-    	return back()->with('flash', 'Your reply has been published');
+    public function store($channelId, Thread $thread, CreatePostForm $form) {
+        return $form->persist($thread);
     }
 
     public function destroy(Reply $reply) {  
@@ -53,24 +36,10 @@ class ReplyController extends Controller
         return back()->with('flash', 'Reply successfully deleted');
     }
 
-    public function update(Reply $reply) {
-
+    public function update(Reply $reply, UpdatePostForm $form) {
         $this->authorize('update',$reply);
-
-        try {
-            $this->validateReply();
-
-            $reply->update([
-
-                'body' => request('body'),
-            ]);
-        } catch(\Exception $e) {
-            return response('Sorry your reply could not be updated at this time.', 422);
-        }
+        $reply->update([
+            'body' => request('body'),
+        ]);
     }
-
-    public function validateReply() {
-        request()->validate(['body' => 'required|min:5|spamfree',]);
-    }
-
 }
