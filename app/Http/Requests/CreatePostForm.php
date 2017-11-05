@@ -34,10 +34,10 @@ class CreatePostForm extends FormRequest
             'body' => 'required|min:5|spamfree',
         ];
     }
-    public function persist($thread) {
-        return $thread->addReply([
-            'body' => request('body'),
-            'user_id' => auth()->id()
-        ])->load('owner');
-    }
+    // public function persist($thread) {
+    //     return $thread->addReply([
+    //         'body' => request('body'),
+    //         'user_id' => auth()->id()
+    //     ])->load('owner');
+    // }
 }
