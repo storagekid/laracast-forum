@@ -66,7 +66,7 @@ class ReplyController extends Controller
     }
 
     public function validateReply() {
-        $this->validate(request(), ['body' => 'required|min:5|spamfree',]);
+        request()->validate(['body' => 'required|min:5|spamfree',]);
     }
 
 }

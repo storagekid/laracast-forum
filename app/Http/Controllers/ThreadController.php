@@ -54,7 +54,7 @@ class ThreadController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        request()->validate([
 
             'title' => 'required|max:30|min:5|spamfree',
             'body' => 'required|min:5|max:2048|spamfree',
