@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use App\Thread;
 use App\Favorite;
 use App\Reply;
@@ -19,8 +20,11 @@ class ReplyController extends Controller
     }
 
     public function store($channelId, Thread $thread) {
-
+        if (Gate::denies('create', new Reply)) {
+            return response('Replies are allow only one per minute', 429);
+        }
         try {
+            // $this->authorize('create', New Reply);
             $this->validateReply();
 
             $reply = $thread->addReply([
