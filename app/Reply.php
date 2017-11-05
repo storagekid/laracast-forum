@@ -20,36 +20,32 @@ class Reply extends Model
         parent::boot();
 
         static::deleted(function ($reply) {
-
             // Delete Replies associated when a thread is deleted
             $reply->favorites->each->delete();
             $reply->thread->decrement('replies_count');
-
         });
 
         static::created(function ($reply) {
-
             // Delete Replies associated when a thread is deleted
             $reply->thread->increment('replies_count');
-
         });
 
     }
 
     public function owner(){
-
     	return $this->belongsTo(User::class, 'user_id');
+    }
 
+    public function mentionedUsers(){
+        preg_match_all('/\@([^\s\.]+)/', $this->body, $matches); 
+        return $matches[1];
     }
 
     public function thread() {
-
     	return $this->belongsTo(Thread::class);
-
     }
 
     public function path() {
-
         return $this->thread->path().'#reply-'.$this->id;
     }
 
