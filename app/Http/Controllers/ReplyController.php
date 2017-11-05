@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Thread;
 use App\Favorite;
 use App\Reply;
-use App\Inspections\Spam;
 
 class ReplyController extends Controller
 {
@@ -67,10 +66,7 @@ class ReplyController extends Controller
     }
 
     public function validateReply() {
-        $this->validate(request(), [
-            'body' => 'required|min:5',
-        ]);
-        resolve(Spam::class)->detect(request('body'));
+        $this->validate(request(), ['body' => 'required|min:5|spamfree',]);
     }
 
 }
