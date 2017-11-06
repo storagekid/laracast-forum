@@ -13,35 +13,33 @@
             </div>
 
         </div>
-        <div class="panel-body">
-            <div class="level" :id="'reply-'+data.id">
-                <form class="flex">
-                    <div class="form-group">
-                        <div v-if="editing">
-                            <textarea rows="4" placeholder="Editing..." class="form-control" v-model="replyBody"></textarea>
+        <form @submit.prevent="updateReply">
+            <div class="panel-body">
+                <div class="level" :id="'reply-'+data.id">
+                        <div class="form-group">
+                            <div v-if="editing">
+                                <textarea rows="4" placeholder="Editing..." class="form-control" v-model="replyBody" required></textarea>
+                            </div>
+                            <div v-else="" v-text="replyBody">
+                            </div>
                         </div>
-                        <div v-else="" v-text="replyBody">
-                        </div>
-                    </div>
-                </form>
-            </div>
-       </div>
-
+                </div>
+           </div>
            <div class="panel-footer level" v-if="canUpdate">
                 <div style="margin-right: 1em;" v-show="editing">
-                    <button type="submit" class="btn btn-xs btn-primary"
-                        @click="updateReply">Save Changes
+                    <button class="btn btn-xs btn-primary">Save Changes
                     </button>
                 </div>
                 <div class="flex">
-                    <button type="submit" class="btn btn-xs btn-warning"
-                        @click="toggleEdit" v-text="editButtonText">
+                    <button type="button" class="btn btn-xs btn-warning"
+                        @click.prevent="toggleEdit" v-text="editButtonText">
                     </button>
                 </div>
                 <button type="submit" class="btn btn-xs btn-danger"
                         @click="deleteReply">Delete Reply
                 </button>
            </div>
+       </form>
 
     </div>
 

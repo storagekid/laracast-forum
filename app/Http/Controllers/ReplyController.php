@@ -41,8 +41,9 @@ class ReplyController extends Controller
         return back()->with('flash', 'Reply successfully deleted');
     }
 
-    public function update(Reply $reply, UpdatePostForm $form) {
+    public function update(Reply $reply) {
         $this->authorize('update',$reply);
+        request()->validate(['body'=> 'required|spamfree']);
         $reply->update([
             'body' => request('body'),
         ]);

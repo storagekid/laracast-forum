@@ -59885,7 +59885,7 @@ exports = module.exports = __webpack_require__(5)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -59900,8 +59900,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Favorite_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Favorite_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
-//
-//
 //
 //
 //
@@ -60500,94 +60498,108 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "panel-body" }, [
-      _c(
-        "div",
-        { staticClass: "level", attrs: { id: "reply-" + _vm.data.id } },
-        [
-          _c("form", { staticClass: "flex" }, [
-            _c("div", { staticClass: "form-group" }, [
-              _vm.editing
-                ? _c("div", [
-                    _c("textarea", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.replyBody,
-                          expression: "replyBody"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { rows: "4", placeholder: "Editing..." },
-                      domProps: { value: _vm.replyBody },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.replyBody = $event.target.value
-                        }
-                      }
-                    })
-                  ])
-                : _c("div", {
-                    domProps: { textContent: _vm._s(_vm.replyBody) }
-                  })
-            ])
-          ])
-        ]
-      )
-    ]),
-    _vm._v(" "),
-    _vm.canUpdate
-      ? _c("div", { staticClass: "panel-footer level" }, [
+    _c(
+      "form",
+      {
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            _vm.updateReply($event)
+          }
+        }
+      },
+      [
+        _c("div", { staticClass: "panel-body" }, [
           _c(
             "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.editing,
-                  expression: "editing"
-                }
-              ],
-              staticStyle: { "margin-right": "1em" }
-            },
+            { staticClass: "level", attrs: { id: "reply-" + _vm.data.id } },
             [
+              _c("div", { staticClass: "form-group" }, [
+                _vm.editing
+                  ? _c("div", [
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.replyBody,
+                            expression: "replyBody"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          rows: "4",
+                          placeholder: "Editing...",
+                          required: ""
+                        },
+                        domProps: { value: _vm.replyBody },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.replyBody = $event.target.value
+                          }
+                        }
+                      })
+                    ])
+                  : _c("div", {
+                      domProps: { textContent: _vm._s(_vm.replyBody) }
+                    })
+              ])
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _vm.canUpdate
+          ? _c("div", { staticClass: "panel-footer level" }, [
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.editing,
+                      expression: "editing"
+                    }
+                  ],
+                  staticStyle: { "margin-right": "1em" }
+                },
+                [
+                  _c("button", { staticClass: "btn btn-xs btn-primary" }, [
+                    _vm._v("Save Changes\n                ")
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "flex" }, [
+                _c("button", {
+                  staticClass: "btn btn-xs btn-warning",
+                  attrs: { type: "button" },
+                  domProps: { textContent: _vm._s(_vm.editButtonText) },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.toggleEdit($event)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-xs btn-primary",
+                  staticClass: "btn btn-xs btn-danger",
                   attrs: { type: "submit" },
-                  on: { click: _vm.updateReply }
+                  on: { click: _vm.deleteReply }
                 },
-                [_vm._v("Save Changes\n                ")]
+                [_vm._v("Delete Reply\n            ")]
               )
-            ]
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "flex" }, [
-            _c("button", {
-              staticClass: "btn btn-xs btn-warning",
-              attrs: { type: "submit" },
-              domProps: { textContent: _vm._s(_vm.editButtonText) },
-              on: { click: _vm.toggleEdit }
-            })
-          ]),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-xs btn-danger",
-              attrs: { type: "submit" },
-              on: { click: _vm.deleteReply }
-            },
-            [_vm._v("Delete Reply\n            ")]
-          )
-        ])
-      : _vm._e()
+            ])
+          : _vm._e()
+      ]
+    )
   ])
 }
 var staticRenderFns = []

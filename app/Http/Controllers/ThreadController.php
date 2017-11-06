@@ -121,44 +121,20 @@ class ThreadController extends Controller
      */
     public function destroy(Channel $channel, Thread $thread)
     {   
-
         // Apply Thread Policy
         $this->authorize('update', $thread);
-
-        // if ($thread->user_id !== auth()->id()) {
-
-        //     if (request()->wantsJson()) {
-        //         return response(['status' => 'Permission Denied'], 403);
-        //     }
-
-        //     return back()->withErrors(['You don\'t have permission to delete this thread.']);
-        // }
-
-        // Delete Replies associated when a thread is deleted
-        // Applied as static method on the Thread Model
-        // Uncomment to apply on controller level
-        // $thread->replies()->delete();
-
         $thread->delete();
-
         if (request()->wantsJson()) {
             return response([], 204);
         }
-
         return redirect()->route('profile', auth()->user());
     }
 
     protected function getThreads(Channel $channel, ThreadFilters $filters) {
-
         $threads = Thread::latest()->filter($filters);
-
         if($channel->exists) {
-
             $threads->where('channel_id', $channel->id);
         }
-
         return $threads = $threads->get();
-
     }
-
 }
