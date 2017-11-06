@@ -12,7 +12,6 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
     <script>
         
         window.App = {!! json_encode([
@@ -45,6 +44,7 @@
         }
 
     </style>
+    @yield('header')
 </head>
 <body>
     <div id="app">

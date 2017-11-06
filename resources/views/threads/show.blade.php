@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('header')
+    <link href="{{ asset('css/vendor/jquery.atwho.css') }}" rel="stylesheet">
+@endsection
+
 @section('content')
 
 <thread-view inline-template :incomedata="{{$thread->replies_count}}" v-cloak>
