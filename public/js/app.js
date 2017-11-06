@@ -60544,7 +60544,7 @@ var render = function() {
                       })
                     ])
                   : _c("div", {
-                      domProps: { textContent: _vm._s(_vm.replyBody) }
+                      domProps: { innerHTML: _vm._s(_vm.replyBody) }
                     })
               ])
             ]

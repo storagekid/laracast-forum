@@ -20,7 +20,7 @@
                             <div v-if="editing">
                                 <textarea rows="4" placeholder="Editing..." class="form-control" v-model="replyBody" required></textarea>
                             </div>
-                            <div v-else="" v-text="replyBody">
+                            <div v-else="" v-html="replyBody">
                             </div>
                         </div>
                 </div>
