@@ -13,7 +13,10 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3>{{ $thread->title }}</h3>
-                        <a href="/profiles/{{ $thread->user->name }}"><span class="small">by {{$thread->user->name}}</span></a>
+                        <a href="/profiles/{{ $thread->user->name }}">
+                            <img src="{{asset('/storage/'.$thread->user->avatar())}}" width="50px" height="50px">
+                            <span class="small">by {{$thread->user->name}}</span>
+                        </a>
                     </div>
                     <div class="panel-body">
                          <p class="body">{{ $thread->body }}</p>

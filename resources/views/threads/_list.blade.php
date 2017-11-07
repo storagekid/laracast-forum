@@ -14,7 +14,10 @@
                 <strong>{{$thread->replies_count}} {{str_plural('Reply', $thread->replies_count)}}</strong>
             </div>
             <p>
-                <a href="{{route('profile', $thread->user)}}"><span class="small">by {{$thread->user->name}}</span></a>
+                <a href="{{route('profile', $thread->user)}}">
+                    <img src="{{asset('/storage/'.$thread->user->avatar())}}" width="50px" height="50px">
+                    <span class="small">by {{$thread->user->name}}</span>
+                </a>
             </p>
         </div>
         <div class="panel-body">

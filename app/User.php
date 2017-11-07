@@ -61,6 +61,10 @@ class User extends Authenticatable
         return '/profiles/'.$this->name;
     }
 
+    public function avatar() {
+        return $this->avatar_path ?: 'avatars/default.jpg';
+    }
+
     public function visitedCacheKey($item) {
         return sprintf("users.%s.visits.%s", $this->id, $item->id);
     }
