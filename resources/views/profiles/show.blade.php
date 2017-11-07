@@ -12,25 +12,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <div class="col-xs-2">
-                    @if ($userProfile->avatar_path)
-                        <img src="{{asset('/storage/'.$userProfile->avatar())}}" width="50px" height="50px">
-                    @else
-                        @can ('update', $userProfile)
-                            <form method="post" action="{{route('avatar', $userProfile)}}" enctype="multipart/form-data">
-                                {{ csrf_field() }}
-                                <label class="btn btn-default btn-primary btn-sm">
-                                    Select Image <input type="file" name="avatar" hidden>
-                                </label>
-                                <button type="submit" class="btn btn-default btn-info btn-sm">Add Avatar</button>
-                            </form>
-                        @endcan
-                    @endif
-                    </div>
-                    <div class="col-xs-10">
-                        <p>Name: <strong>{{$userProfile->name}}</strong></p>
-                        <p>Email: <strong>{{$userProfile->email}}</strong></p>
-                    </div>
+                    <avatar-form :user="{{$userProfile}}"></avatar-form>
                 </div>
             </div>
             <h2 class="text-center">My Activities</h2>

@@ -64,6 +64,9 @@ class User extends Authenticatable
     public function avatar() {
         return $this->avatar_path ?: 'avatars/default.jpg';
     }
+    public function getAvatarPathAttribute($avatar) {
+        return asset($avatar ?: 'avatars/default.jpg');
+    }
 
     public function visitedCacheKey($item) {
         return sprintf("users.%s.visits.%s", $this->id, $item->id);
