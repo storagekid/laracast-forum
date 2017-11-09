@@ -8,7 +8,7 @@ use App\Events\ThreadHasNewReply;
 
 class Thread extends Model
 {
-    use RecordsActivity;
+    use RecordsActivity, RecordsVisits;
 
 	protected $guarded = [];
 
@@ -127,7 +127,7 @@ class Thread extends Model
         return $this->updated_at > cache($key);
     }
 
-    public function visits() {
+    public function visitsFromTrending() {
         $trendings = Trending::doJson('trending_threads');
         foreach($trendings as $thread) {
             if ($thread->title == $this->title) return $thread->score;

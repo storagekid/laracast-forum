@@ -110,4 +110,14 @@ class ThreadTest extends TestCase
         $this->thread->updated_at = \Carbon\Carbon::now()->addMonth();
         $this->assertTrue($this->thread->hasUpdatesFor($user));
     }
+    /** @test */
+    public function a_thread_records_each_visit()
+    {
+        $this->thread->resetVisits('threads');
+        $this->assertSame(0, $this->thread->visits('threads'));
+        $this->thread->recordVisit('threads');
+        $this->assertEquals(1, $this->thread->visits('threads'));
+        $this->thread->recordVisit('threads');
+        $this->assertEquals(2, $this->thread->visits('threads'));
+    }
 }
