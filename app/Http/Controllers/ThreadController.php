@@ -29,9 +29,10 @@ class ThreadController extends Controller
         if (request()->wantsJson()) {
             return $threads;
         }
+        $trending = Thread::orderBy('visits_count','desc')->take(5)->get();
         return view('threads.index', [
             'threads' => $threads,
-            'trending' => Trending::doJson('trending_threads',0,4)
+            'trending' => $trending
         ]);
     }
 
@@ -86,12 +87,14 @@ class ThreadController extends Controller
         // Record that the user visited this thread as timestamp
         if (auth()->check()) auth()->user()->readed($thread);
 
-        Trending::set('trending_threads', 1, [
-            'title' => $thread->title,
-            'path' => $thread->path(),
-        ]);
-        $thread->visits()->record();
-        // dd(cache($key));
+        // Trending::set('trending_threads', 1, [
+        //     'title' => $thread->title,
+        //     'path' => $thread->path(),
+        // ]);
+        // Record visits with Redis
+        // $thread->visits()->record();
+        // Record visits in DB
+        $thread->increment('visits_count');
         return view('threads.show', compact('thread'));
     }
 

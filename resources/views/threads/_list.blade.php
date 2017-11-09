@@ -30,7 +30,7 @@ $i = 0;
             {{ $thread->body }}
         </div>
         <div class="panel-footer">
-            {{$thread->visits()->count()}} Visits
+            {{$thread->visits_count}} Visits
         </div>
     </div>
 </article>

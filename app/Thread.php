@@ -126,10 +126,10 @@ class Thread extends Model
         $key = auth()->user()->visitedCacheKey($this);
         return $this->updated_at > cache($key);
     }
-
-    public function visits() {
-        return new Visits($this);
-    }
+    // Visits Counter With Redis
+    // public function visits() {
+    //     return new Visits($this);
+    // }
 
     public function visitsFromTrending() {
         $trendings = Trending::doJson('trending_threads');

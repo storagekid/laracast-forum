@@ -16,9 +16,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         \View::composer(['threads.create','layouts.app'], function($view){
-            $channels = \Cache::rememberForever('channels', function() {
-                return \App\Channel::all();
-            });
+            // $channels = \Cache::rememberForever('channels', function() {
+            //     return \App\Channel::all();
+            // });
+            $channels = \App\Channel::all();
             $view->with('channels', $channels);
         });
         \Validator::extend('spamfree', 'App\Rules\SpamFree@passes');
