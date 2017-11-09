@@ -1,6 +1,12 @@
+@php
+$i = 0;
+@endphp
 @forelse ($threads as $thread)
-<article>
-    <div class="panel panel-default col-xs-6">
+@if ($i == 0 | $i%2 == 0)
+<div class="row">
+@endif
+<article class=" col-xs-6">
+    <div class="panel panel-default">
         <div class="panel-heading">
             <div class="level">
                 <h4 class="title flex">
@@ -23,8 +29,15 @@
         <div class="panel-body">
             {{ $thread->body }}
         </div>
+        <div class="panel-footer">
+            {{$thread->visits()}}
+        </div>
     </div>
 </article>
+@php $i++ @endphp
+@if ($i%2 == 0)
+</div>
+@endif
 @empty
 <h3 class="text-center">There are no threads for this channel.</h3>
 @endforelse

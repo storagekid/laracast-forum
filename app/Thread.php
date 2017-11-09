@@ -126,6 +126,13 @@ class Thread extends Model
         $key = auth()->user()->visitedCacheKey($this);
         return $this->updated_at > cache($key);
     }
+
+    public function visits() {
+        $trendings = Trending::doJson('trending_threads');
+        foreach($trendings as $thread) {
+            if ($thread->title == $this->title) return $thread->score;
+        }
+    }
 }
 
 
