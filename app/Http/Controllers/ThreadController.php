@@ -90,7 +90,7 @@ class ThreadController extends Controller
             'title' => $thread->title,
             'path' => $thread->path(),
         ]);
-        $thread->recordVisit('threads');
+        $thread->visits()->record();
         // dd(cache($key));
         return view('threads.show', compact('thread'));
     }
