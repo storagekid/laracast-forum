@@ -59070,12 +59070,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
-    props: ['message'],
+    props: ['message', 'sessionLabel'],
 
     data: function data() {
 
         return {
-
             body: '',
             label: '',
             flashEvent: false
@@ -59091,12 +59090,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var _this = this;
 
         if (this.message) {
-
-            this.showFlash(this.message);
+            var data = {};
+            data.message = this.message;
+            data.label = this.sessionLabel != '' ? this.sessionLabel : 'info';
+            this.showFlash(data);
         }
-
         window.events.$on('flash', function (data) {
-
             _this.showFlash(data);
         });
     },

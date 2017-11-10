@@ -20,6 +20,7 @@ $factory->define(App\User::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
+        'confirmed' => false,
     ];
 });
 
@@ -42,6 +43,7 @@ $factory->define(App\Thread::class, function(Faker $faker) {
 		},
 		'title' => $faker->sentence,
 		'body' => $faker->paragraph,
+		'visits_count' => 0,
 	];
 });
 

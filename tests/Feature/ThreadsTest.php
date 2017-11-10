@@ -113,7 +113,7 @@ class ThreadsTest extends TestCase
     /** @test */
     public function a_thread_records_each_visit_with_database_approach()
     {
-        $this->assertSame(0, $this->thread->fresh()->visits_count);
+        $this->assertSame(0, $this->thread->visits_count);
         $this->call('GET', $this->thread->path());
         $this->assertEquals(1, $this->thread->fresh()->visits_count);
     }

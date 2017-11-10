@@ -8,12 +8,11 @@
 
     export default {
 
-        props: ['message'],
+        props: ['message','sessionLabel'],
         
         data() {
 
             return {
-
                 body: '',
                 label: '',
                 flashEvent: false,
@@ -25,14 +24,13 @@
             }
         },
         created() {
-
             if (this.message) {
-
-                this.showFlash(this.message);
+                let data = {};
+                data.message = this.message;
+                data.label = this.sessionLabel != '' ? this.sessionLabel : 'info';
+                this.showFlash(data);
             }
-
             window.events.$on('flash', data => {
-
                 this.showFlash(data);
             })
         },

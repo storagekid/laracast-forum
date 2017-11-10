@@ -27,6 +27,13 @@ class ManageThreadsTest extends TestCase
         $this->withOutExceptionHandling()->get('/threads/create')
             ->assertRedirect('login');
     }
+    /** @test */
+    public function an_authenticated_user_must_confirm_their_email_address_before_creating_threads() {
+
+        $this->publishThread([])
+            ->assertRedirect('/threads')
+            ->assertSessionHas('flash');
+    }
 
     /** @test */
     public function an_authenticated_user_can_create_new_threads()
@@ -45,6 +52,8 @@ class ManageThreadsTest extends TestCase
     /** @test */
     public function a_thread_creation_requires_validation()
     {
+        $this->signIn();
+        auth()->user()->confirmed = true;
         // Title is required
         $this->publishThread(['title'=>null])
             // ->assertStatus(422);
@@ -133,10 +142,10 @@ class ManageThreadsTest extends TestCase
     public function publishThread($overrrides){
 
         // Given we have a signed user
-        $this->withExceptionHandling()->signIn();
-
+        if (! auth()->check()) {
+            $this->withExceptionHandling()->signIn();
+        }
         $thread = make('App\Thread', $overrrides);
-
         // When we hit the endpoint to create a new thread
         return $this->post('/threads', $thread->toArray());
 

@@ -19,7 +19,6 @@ class ParticipateInForumTest extends TestCase
 
     	$this->withOutExceptionHandling()->post($thread->path().'/replies', []);
     }
-
     /** @test */
     public function an_authenticated_user_may_participate_in_forum_threads() {
 

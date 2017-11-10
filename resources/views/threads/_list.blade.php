@@ -2,7 +2,7 @@
 $i = 0;
 @endphp
 @forelse ($threads as $thread)
-@if ($i == 0 | $i%2 == 0)
+@if ($i == 0 || $i%2 == 0)
 <div class="row">
 @endif
 <article class=" col-xs-6">
@@ -36,6 +36,8 @@ $i = 0;
 </article>
 @php $i++ @endphp
 @if ($i%2 == 0)
+</div>
+@elseif(count($threads) == 1)
 </div>
 @endif
 @empty
