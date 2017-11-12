@@ -39,7 +39,7 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    /**
+    /**π
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
@@ -66,6 +66,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'confirmation_token' => str_random(25),
         ]);
     }
 }
