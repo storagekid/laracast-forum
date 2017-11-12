@@ -29,9 +29,10 @@ class ManageThreadsTest extends TestCase
     }
     /** @test */
     public function an_authenticated_user_must_confirm_their_email_address_before_creating_threads() {
-
+        $user = factory('App\User')->states('unconfirmed')->create();
+        $this->signIn($user);
         $this->publishThread([])
-            ->assertRedirect('/threads')
+            ->assertRedirect(route('home'))
             ->assertSessionHas('flash');
     }
 
@@ -39,10 +40,9 @@ class ManageThreadsTest extends TestCase
     public function an_authenticated_user_can_create_new_threads()
     {
         // Given we have a signed user
-        $this->signIn();
-
+        $this->withOutExceptionHandling()->signIn();
         // When we hit the endpoint to create a new thread
-        $thread = create('App\Thread');
+        $thread = make('App\Thread');
         $this->post('/threads', $thread->toArray());
 
         // Then, when we visit the thread page
@@ -53,7 +53,7 @@ class ManageThreadsTest extends TestCase
     public function a_thread_creation_requires_validation()
     {
         $this->signIn();
-        auth()->user()->confirmed = true;
+        // auth()->user()->confirmed = true;
         // Title is required
         $this->publishThread(['title'=>null])
             // ->assertStatus(422);
@@ -64,8 +64,8 @@ class ManageThreadsTest extends TestCase
             // ->assertStatus(422);
             ->assertSessionHasErrors('title');
 
-        // Title's length can't be more than 30
-        $this->publishThread(['title'=>'patajhfifheifheiuwfhewhfeuiwfheuwfhei'])
+        // Title's length can't be more than 255
+        $this->publishThread(['title'=> str_random(256)])
             // ->assertStatus(422);
             ->assertSessionHasErrors('title');
 

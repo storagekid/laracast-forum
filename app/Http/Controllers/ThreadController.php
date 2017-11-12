@@ -60,7 +60,7 @@ class ThreadController extends Controller
         // }
         request()->validate([
 
-            'title' => 'required|max:30|min:5|spamfree',
+            'title' => 'required|max:255|min:5|spamfree',
             'body' => 'required|min:5|max:2048|spamfree',
             'channel_id' => 'required|exists:channels,id'
 
