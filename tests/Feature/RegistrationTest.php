@@ -28,18 +28,20 @@ class RegistrationTest extends TestCase
     /** @test */
     public function users_can_fully_confirm_their_email_addresses() {
     	// Mail::fake();
-        $this->post(route('register'), [
+       $this->post(route('register'), [
         	'name' => 'John',
         	'email' => 'john@example.com',
         	'password' => 'foobar',
         	'password_confirmation' => 'foobar'
         ]);
+       // dd($user);
         $user = User::whereName('John')->first();
         $this->assertFalse($user->confirmed);
         $this->assertNotNull($user->confirmation_token);
 
         $response = $this->get(route('register.confirm', ['token' => $user->confirmation_token]))
             ->assertRedirect(route('home'));
+        $this->assertNull($user->fresh()->confirmation_token);
         $this->assertTrue($user->fresh()->confirmed);
     }
     /** @test */
