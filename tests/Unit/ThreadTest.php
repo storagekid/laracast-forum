@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
+use App\Thread;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Notification;
@@ -23,9 +24,9 @@ class ThreadTest extends TestCase
 	}
 
     /** @test */
-    public function a_thread_can_make_a_string_path()
+    public function a_thread_can_make_a_path()
     {
-        $this->assertEquals('/threads/'.$this->thread->channel->slug.'/'.$this->thread->id,$this->thread->path());
+        $this->assertEquals('/threads/'.$this->thread->channel->slug.'/'.$this->thread->slug,$this->thread->path());
     }
 
     /** @test */
@@ -109,6 +110,16 @@ class ThreadTest extends TestCase
         $this->assertFalse($this->thread->hasUpdatesFor($user));
         $this->thread->updated_at = \Carbon\Carbon::now()->addMonth();
         $this->assertTrue($this->thread->hasUpdatesFor($user));
+    }
+    /** @test */
+    public function a_thread_requires_a_unique_slug()
+    {
+        $thread = create('App\Thread', ['title'=>'Foo Title', 'slug'=>'foo-title']);
+        $this->assertEquals($thread->fresh()->slug, 'foo-title');
+        $this->withOutExceptionHandling()->post('/threads', $thread->toArray());
+        $this->assertTrue(Thread::whereSlug('foo-title-2')->exists());
+        $this->withOutExceptionHandling()->post('/threads', $thread->toArray());
+        $this->assertTrue(Thread::whereSlug('foo-title-3')->exists());
     }
     /** @test */
     // public function a_thread_records_each_visit_with_redis()

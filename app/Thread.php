@@ -40,9 +40,13 @@ class Thread extends Model
 
     }
 
+    public function getRouteKeyName() {
+        return 'slug';
+    }
+
     public function path(){
 
-    	return '/threads/' . $this->channel->slug .'/'.$this->id;
+    	return '/threads/' . $this->channel->slug .'/'.$this->slug;
 
     }
 
@@ -136,6 +140,22 @@ class Thread extends Model
         foreach($trendings as $thread) {
             if ($thread->title == $this->title) return $thread->score;
         }
+    }
+
+    public function setSlugAttribute($value) {
+        if (static::whereSlug($slug = str_slug($value))->exists()) {
+            $slug = $this->incrementSlug($slug);
+        }
+        $this->attributes['slug'] = $slug;
+    }
+    public function incrementSlug($slug) {
+        $max = static::whereTitle($this->title)->latest('id')->value('slug');
+        if (str_slug($this->title) !== $max) {
+            return preg_replace_callback('/(\d+)$/', function ($matches) {
+                return $matches[1] + 1;
+            }, $max);
+        }
+        return "{$slug}-2";
     }
 }
 

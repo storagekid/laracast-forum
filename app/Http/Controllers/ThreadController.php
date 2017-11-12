@@ -71,6 +71,7 @@ class ThreadController extends Controller
             'channel_id' => request('channel_id'),
             'title' => request('title'),
             'body' => request('body'),
+            'slug' => request('title'), // Using Custom Mutator behind the scenes to prevent duplication
        ]);
 
        $thread->subscribe(auth()->id());
