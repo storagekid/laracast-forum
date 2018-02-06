@@ -75,7 +75,7 @@ class User extends Authenticatable
         return $this->avatar_path ?: 'avatars/default.jpg';
     }
     public function getAvatarPathAttribute($avatar) {
-        return asset($avatar ?: 'avatars/default.jpg');
+        return asset($avatar ?: '/avatars/default.jpg');
     }
 
     public function visitedCacheKey($item) {
