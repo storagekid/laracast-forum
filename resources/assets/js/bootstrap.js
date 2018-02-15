@@ -51,13 +51,16 @@ if (token) {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
+let authorizations = require('./authorizations');
+window.Vue.prototype.authorize = function (...params) {
+	if (! window.App.signedIn) return false;
 
-window.Vue.prototype.authorize = function (handler) {
-
-	let user = window.App.user
-
-	return user ? handler(user) : false;
+	if (typeof params[0] === 'string') {
+		return authorizations[params[0]](params[1]);
+	}
+	return params[0](window.App.user);
 };
+Vue.prototype.signedIn = window.App.signedIn;
 
 window.events = new Vue();
 

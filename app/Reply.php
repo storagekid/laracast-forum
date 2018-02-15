@@ -11,9 +11,9 @@ class Reply extends Model
     use Favoritable;
 
 	protected $guarded = [];
-    protected $with = ['owner','favorites'];
+    protected $with = ['owner','favorites','thread'];
 
-    protected $appends = ['favoritesCount','isFavorited'];
+    protected $appends = ['favoritesCount','isFavorited','isBest'];
 
     protected static function boot() {
 
@@ -23,6 +23,10 @@ class Reply extends Model
             // Delete Replies associated when a thread is deleted
             $reply->favorites->each->delete();
             $reply->thread->decrement('replies_count');
+            // If it was marked as best reply in the thread restart thread column to null
+            // if ($reply->isBest()) {
+            //     $reply->thread->update(['best_reply_id' => null]);
+            // }
         });
 
         static::created(function ($reply) {
@@ -55,6 +59,14 @@ class Reply extends Model
 
     public function setBodyAttribute($body) {
         $this->attributes['body'] = preg_replace('/@([\w\-]+)/', '<a href="/profiles/$1">$0</a>', $body);
+    }
+
+    public function isBest() {
+        return $this->thread->best_reply_id == $this->id;
+    }
+
+    public function getIsBestAttribute() {
+        return $this->isBest(); 
     }
 
 }

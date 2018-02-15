@@ -6,11 +6,11 @@
 
 @section('content')
 
-<thread-view inline-template :incomedata="{{$thread->replies_count}}" v-cloak>
+<thread-view :data-thread="{{$thread}}" inline-template v-cloak>
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <div class="panel panel-default">
+                <div class="panel" :class="locked ? 'panel-warning' : 'panel-default'">
                     <div class="panel-heading">
                         <h3>{{ $thread->title }}</h3>
                         <a href="/profiles/{{ $thread->user->name }}">
@@ -25,8 +25,8 @@
                 @if(count($errors))
                     @include('layouts.errors')
                 @endif
-
-                <replies 
+                
+                <replies
                     @removed="repliesCount--" 
                     @added="repliesCount++">                    
                 </replies>
@@ -43,9 +43,19 @@
                          <h4>Reply Counter</h4>
                          <p><span v-text="repliesCount"></span> {{str_plural('comment',$thread->replies_count)}}</p>
                          @if(auth()->check())
-                         <p>
-                            <subscribe-button :active="{{json_encode($thread->isSubscribeTo)}}"></subscribe-button>
-                         </p>
+                             <p>
+                                <subscribe-button :active="{{json_encode($thread->isSubscribeTo)}}"></subscribe-button>
+                             </p>
+                             @if(auth()->user()->isAdmin())
+                                 <p>
+                                    <button 
+                                        class="btn btn-block"
+                                        :class="locked ? 'btn-primary' : 'btn-danger'"
+                                        @click="toggleLock" 
+                                        v-text="locked ? 'Unlock' : 'lock'">                                            
+                                    </button>
+                                 </p>
+                             @endif
                          @endif
                          @can('update',$thread)
                          <p>

@@ -70,11 +70,15 @@ class ThreadController extends Controller
             'user_id' =>auth()->id(),
             'channel_id' => request('channel_id'),
             'title' => request('title'),
-            'body' => request('body'),
-            'slug' => request('title'), // Using Custom Mutator behind the scenes to prevent duplication
+            'body' => request('body')
+            // 'slug' => request('title'), // Using Custom Mutator behind the scenes to prevent duplication
        ]);
 
        $thread->subscribe(auth()->id());
+
+       if (request()->wantsJson()) {
+            return response($thread, 201);
+        }
 
        return redirect($thread->path())
             ->with('flash', 'Your thread has been published');
@@ -121,9 +125,9 @@ class ThreadController extends Controller
      * @param  \App\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Thread $thread)
+    public function update(Channel $channel, Thread $thread)
     {
-        //
+        
     }
 
     /**

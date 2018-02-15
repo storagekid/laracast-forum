@@ -23,6 +23,10 @@ Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy');
 Route::post('/threads', 'ThreadController@store')->middleware('must-be-confirmed');
 Route::get('/threads/{channel}', 'ThreadController@index');
 Route::get('/threads/{channel}/{thread}', 'ThreadController@show');
+Route::patch('/threads/{channel}/{thread}', 'ThreadController@update')->name('threads.update');
+
+Route::post('/locked-threads/{thread}', 'LockedThreadController@store')->name('locked-threads.store')->middleware('admin-only');
+Route::delete('/locked-threads/{thread}', 'LockedThreadController@destroy')->name('locked-threads.destroy')->middleware('admin-only');
 
 Route::post('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionController@store');
 Route::delete('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionController@destroy');
@@ -36,7 +40,9 @@ Route::post('/replies/{reply}/favorite', 'FavoriteController@store');
 Route::delete('/replies/{reply}/favorite', 'FavoriteController@destroy');
 
 Route::patch('/replies/{reply}', 'ReplyController@update');
-Route::delete('/replies/{reply}', 'ReplyController@destroy');
+Route::delete('/replies/{reply}', 'ReplyController@destroy')->name('replies.destroy');
+
+Route::post('/replies/{reply}/best', 'BestReplyController@store')->name('best-replies.store');
 
 Route::get('/profiles/{user}', 'ProfileController@show')->name('profile');
 Route::delete('/profiles/{user}/notifications/{notification}', 'NotificationController@destroy');
