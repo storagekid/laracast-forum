@@ -43,6 +43,9 @@
                 <li>
                     <a href="/threads/create"><button class="btn btn-sm btn-primary">New Thread</button></a>
                 </li>
+                <li>
+                    <a href="/customEmail"><button class="btn btn-sm btn-primary">Send Test Email</button></a>
+                </li>
                 @endif
             </ul>
 

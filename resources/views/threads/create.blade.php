@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('header')
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row">
@@ -30,6 +34,9 @@
                             <label for="body">Thread Body</label>
                             <textarea class="form-control" id="body" name="body" placeholder="Write something interesting..." required>{{old('body')}}</textarea>
 
+                        </div>
+                        <div class="form-group">
+                            <div class="g-recaptcha" data-sitekey="6LdVmEYUAAAAALdiOdUC1SaP5nNO9Q3OGTb36Axu"></div>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Add Thread</button>

@@ -6,6 +6,7 @@ use App\Channel;
 use App\Thread;
 use App\Trending;
 use App\Filters\ThreadFilters;
+use App\Rules\Recaptcha;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -52,20 +53,20 @@ class ThreadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Recaptcha $recaptcha)
     {
         // if (! auth()->user()->confirmed) {
         //     return redirect('/threads')
         //         ->with('flash', 'You must first confirm your email address.');
         // }
-        request()->validate([
 
+        request()->validate([
             'title' => 'required|max:255|min:5|spamfree',
             'body' => 'required|min:5|max:2048|spamfree',
-            'channel_id' => 'required|exists:channels,id'
-
+            'channel_id' => 'required|exists:channels,id',
+            'g-recaptcha-response' => ['required', $recaptcha],
         ]);
-
+        // dd(session()->all());
        $thread = Thread::create([
             'user_id' =>auth()->id(),
             'channel_id' => request('channel_id'),
@@ -127,7 +128,18 @@ class ThreadController extends Controller
      */
     public function update(Channel $channel, Thread $thread)
     {
-        
+        // Authorization
+        $this->authorize('update', $thread);
+        // Validation
+        // Update
+        $thread->update(request()->validate([
+            'title' => 'required|max:255|min:5|spamfree',
+            'body' => 'required|min:5|max:2048|spamfree',
+            // 'channel_id' => 'required|exists:channels,id',
+            // 'g-recaptcha-response' => ['required', $recaptcha],
+        ]));
+
+        return $thread;
     }
 
     /**

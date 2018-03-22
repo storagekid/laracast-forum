@@ -6,10 +6,21 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\Activity;
+use App\Rules\Recaptcha;
 
 class ManageThreadsTest extends TestCase
 {
 	use DatabaseMigrations;
+
+    public function setUp() {
+        parent::setUp();
+
+        app()->singleton(Recaptcha::class, function() {
+            return \Mockery::mock(Recaptcha::class, function($m) {
+                $m->shouldReceive('passes')->andReturn(true);
+            });
+        });
+    }
 
 	/** @test */
     public function unauthecated_may_not_create_threads() {
@@ -40,10 +51,10 @@ class ManageThreadsTest extends TestCase
     public function an_authenticated_user_can_create_new_threads()
     {
         // Given we have a signed user
-        $this->withOutExceptionHandling()->signIn();
+        $this->signIn();
         // When we hit the endpoint to create a new thread
         $thread = make('App\Thread');
-        $this->post('/threads', $thread->toArray());
+        $this->post('/threads', $thread->toArray() + ['g-recaptcha-response'=>'test']);
 
         // Then, when we visit the thread page
         $this->get($thread->path())->assertSee($thread->title)->assertSee($thread->body);
@@ -137,6 +148,33 @@ class ManageThreadsTest extends TestCase
         }
 
         $this->assertEquals(0, Activity::count());
+    }
+
+    /** @test */
+    function a_thread_requires_recaptcha_verification() {
+        unset(app()[Recaptcha::class]);
+        $this->signIn();
+        $this->publishThread(['g-recaptcha-response'=>'test'])
+            ->assertSessionHasErrors('g-recaptcha-response');
+    }
+
+    /** @test */
+    function a_thread_with_a_title_that_ends_in_a_number_should_generate_the_proper_slug() 
+    {
+        $this->signIn();
+        $thread = create('App\Thread', ['title'=>'Foo Title 34']);
+        $thread2 = $this->postJson('/threads', $thread->toArray() + ['g-recaptcha-response'=>'test'])->json();
+        $this->assertEquals("foo-title-34-{$thread2['id']}", $thread2['slug']);
+    }
+
+    /** @test */
+    public function a_thread_requires_a_unique_slug()
+    {
+        $this->signIn();
+        $thread = create('App\Thread', ['title'=>'Foo Title']);
+        $this->assertEquals($thread->fresh()->slug, 'foo-title');
+        $thread2 = $this->withOutExceptionHandling()->postJson('/threads', $thread->toArray() + ['g-recaptcha-response'=>'test'])->json();
+        $this->assertTrue(\App\Thread::whereSlug("foo-title-{$thread2['id']}")->exists());
     }
 
     public function publishThread($overrrides){

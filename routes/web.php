@@ -17,6 +17,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
+// Custom Email Sender
+Route::get('/customEmail', 'CustomEmailController@fire');
+
 Route::get('/threads', 'ThreadController@index')->name('home');
 Route::get('/threads/create', 'ThreadController@create');
 Route::delete('/threads/{channel}/{thread}', 'ThreadController@destroy');

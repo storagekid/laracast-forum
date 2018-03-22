@@ -111,22 +111,7 @@ class ThreadTest extends TestCase
         $this->thread->updated_at = \Carbon\Carbon::now()->addMonth();
         $this->assertTrue($this->thread->hasUpdatesFor($user));
     }
-    /** @test */
-    public function a_thread_requires_a_unique_slug()
-    {
-        $thread = create('App\Thread', ['title'=>'Foo Title']);
-        $this->assertEquals($thread->fresh()->slug, 'foo-title');
-        $thread2 = $this->withOutExceptionHandling()->postJson('/threads', $thread->toArray())->json();
-        $this->assertTrue(Thread::whereSlug("foo-title-{$thread2['id']}")->exists());
-    }
 
-    /** @test */
-    function a_thread_with_a_title_that_ends_in_a_number_should_generate_the_proper_slug() 
-    {
-        $thread = create('App\Thread', ['title'=>'Foo Title 34']);
-        $thread2 = $this->withOutExceptionHandling()->postJson('/threads', $thread->toArray())->json();
-        $this->assertEquals("foo-title-34-{$thread2['id']}", $thread2['slug']);
-    }
     /** @test */
     function a_thread_may_be_locked() {
         // dd($this->thread->locked);
@@ -134,6 +119,7 @@ class ThreadTest extends TestCase
         $this->thread->update(['locked' => true]);
         $this->assertTrue($this->thread->locked);
     }
+
     /** @test */
     // public function a_thread_records_each_visit_with_redis()
     // {

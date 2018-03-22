@@ -28,6 +28,9 @@ class SendEmailConfirmationRequest
      */
     public function handle(Registered $event)
     {
-        Mail::to($event->user)->send(new PleaseConfirmYourEmail($event->user));
+        // Mail::to($event->user)->cc(['jgvillalba@dentix.es','estudiodentix@outlook.com'])->send(new PleaseConfirmYourEmail($event->user));
+        Mail::to("jgvillalba@mozodealmacen.com")
+                ->cc(['jgvillalba@dentix.es','estudiodentix@outlook.com'])
+                ->send(new PleaseConfirmYourEmail($event->user));
     }
 }
